@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Responsivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --text-color: #333;
+            --bg-color: #ecf0f1;
+            --navbar-width: 250px;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            height: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .container {
+            display: flex;
+            height: 100%;
+        }
+        .navbar {
+            width: var(--navbar-width);
+            background-color: var(--secondary-color);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .navbar .logo {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .navbar .close-btn {
+            display: none;
+            justify-content: flex-end;
+            padding: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        .navbar a {
+            display: block;
+            color: #f2f2f2;
+            padding: 16px 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .navbar a:hover, .navbar a.active {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-left-color: var(--primary-color);
+        }
+        .content {
+            flex-grow: 1;
+            margin-left: var(--navbar-width);
+            padding: 40px;
+            background-color: #fff;
+            min-height: 100vh;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        .content h1 {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        @media screen and (max-width: 1024px) {
+            .navbar {
+                transform: translateX(-100%);
+            }
+            .content {
+                margin-left: 0;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .navbar.active {
+                transform: translateX(0);
+            }
+            .content.pushed {
+                margin-left: var(--navbar-width);
+            }
+            .navbar .close-btn {
+                display: flex;
+            }
+        }
+        @media screen and (max-width: 768px) {
+            .content, .content.pushed {
+                margin-left: 0;
+                padding: 20px;
+            }
+            .navbar {
+                width: 100%;
+            }
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+    <div class="container">
+        <nav class="navbar" id="navbar">
+            <!-- Botão de fechar a navbar -->
+            <div class="close-btn" id="closeBtn">&times;</div>
+            <div class="logo">Dashboard</div>
+            <a href="index.html">Início</a>
+            <a href="lideranca.html" class="active">Liderança</a>
+            <a href="membros.html">Membros</a>
+            <a href="agenda.html">Agenda</a>
+            <a href="financas.html">Finanças</a>
+        </nav>
+
+        <div class="content" id="content">
+            <h1>Bem-vindo a Secretaria do Phryenia!</h1>
+            <p>Este é um Dashboard que ajuda no controle da secretaria da igreja!</p>
+            
+            <div class="dashboard-cards">
+                <div class="card">
+                    <h2>Total de Membros</h2>
+                    <p>250</p>
+                </div>
+                <div class="card">
+                    <h2>Eventos do Mês</h2>
+                    <p>5</p>
+                </div>
+                <div class="card">
+                    <h2>Receita Mensal</h2>
+                    <p>R$ 15.000</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const closeBtn = document.getElementById('closeBtn');
+        const navbar = document.getElementById('navbar');
+        const content = document.getElementById('content');
+
+        menuToggle.addEventListener('click', () => {
+            navbar.classList.toggle('active');
+            content.classList.toggle('pushed');
+        });
+
+        // Fechar a navbar ao clicar no botão de fechar
+        closeBtn.addEventListener('click', () => {
+            navbar.classList.remove('active');
+            content.classList.remove('pushed');
+        });
+
+        // Fechar o menu ao clicar em um link (para telas menores)
+        const navLinks = navbar.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    navbar.classList.remove('active');
+                    content.classList.remove('pushed');
+                }
+            });
+        });
+
+        // Ajustar layout se a janela for redimensionada
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                navbar.classList.remove('active');
+                content.classList.remove('pushed');
+            }
+        });
+    </script>
+</body>
+</html>
